@@ -1,0 +1,6 @@
+[mysqld]
+user = mysql
+datadir = /var/lib/mysql # where the database files live (volume mount)
+port = 3306
+bind-address = 0.0.0.0 # listen on all interfaces so other containers can connect
+skip-networking = 0 # keep TCP networking enabled (to be able to connect)
