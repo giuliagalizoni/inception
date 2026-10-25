@@ -12,11 +12,13 @@ cd /var/www/html
 
 # download WordPress files if the volume is empty
 if [ ! -f wp-load.php ]; then
+	echo "Downloading WordPress..."
 	wp core download --allow-root
 fi
 
 # create wp-config.php with the database connection info
 if [ ! -f wp-config.php ]; then
+	echo "Creating wp-config.php..."
 	wp config create --allow-root \
 		--dbname="$MYSQL_DATABASE" \
 		--dbuser="$MYSQL_USER" \
@@ -26,6 +28,7 @@ fi
 
 # install the site (creates the admin user) if not done yet
 if ! wp core is-installed --allow-root 2>/dev/null; then
+	echo "Installing WordPress and creating admin user $WP_ADMIN_USER..."
 	wp core install --allow-root \
 		--url="https://$DOMAIN_NAME" \
 		--title="$WP_TITLE" \
@@ -33,10 +36,13 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
 		--admin_password="$WP_ADMIN_PASSWORD" \
 		--admin_email="$WP_ADMIN_EMAIL" \
 		--skip-email
+else
+	echo "WordPress already installed, skipping installation"
 fi
 
 # create the second user if it doesn't exist yet
 if ! wp user get "$WP_USER" --allow-root > /dev/null 2>&1; then
+	echo "Creating user $WP_USER..."
 	wp user create --allow-root \
 		"$WP_USER" "$WP_USER_EMAIL" \
 		--role=author \
@@ -47,4 +53,5 @@ fi
 chown -R www-data:www-data /var/www/html
 
 # replace the shell with PHP-FPM so it runs as PID 1
+echo "Starting PHP-FPM..."
 exec php-fpm8.2 -F

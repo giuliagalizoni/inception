@@ -20,6 +20,9 @@ RUN curl -o /usr/local/bin/wp \
 # folder where PHP-FPM keeps its runtime files
 RUN mkdir -p /run/php
 
+# send PHP-FPM logs to stderr so they show in "docker logs"
+RUN sed -i 's|^error_log = .*|error_log = /proc/self/fd/2|' /etc/php/8.2/fpm/php-fpm.conf
+
 # our PHP-FPM config (listen on port 9000 for nginx)
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 

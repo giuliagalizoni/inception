@@ -8,7 +8,8 @@ chown -R mysql:mysql /var/lib/mysql
 
 # first start only: the data directory is still empty
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-	 mariadb-install-db --user=mysql --datadir=/var/lib/mysql > /dev/null
+	echo "First start: initializing database $MYSQL_DATABASE..."
+	mariadb-install-db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
 	mysqld --user=mysql --bootstrap << EOF
 FLUSH PRIVILEGES;
@@ -20,7 +21,11 @@ GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
 FLUSH PRIVILEGES;
 EOF
+	echo "Database and user $MYSQL_USER created"
+else
+	echo "Database already exists, skipping setup"
 fi
 
 # replace the shell with mysqld so it runs as PID 1
+echo "Starting MariaDB..."
 exec mysqld --user=mysql

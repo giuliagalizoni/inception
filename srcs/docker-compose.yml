@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
     # check if MariaDB is ready to accept connections
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u $$MYSQL_USER --password=$$(cat /run/secrets/db_password) --silent"]
       interval: 5s
       timeout: 3s
       retries: 10
