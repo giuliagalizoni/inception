@@ -1,7 +1,7 @@
 # base image: starting point of the container
 FROM debian:bookworm
 
-# installs mariadb
+# installs mariadb and cleanup system tables
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends mariadb-server mariadb-client \
 	&& rm -rf /var/lib/apt/lists/* /var/lib/mysql/*
