@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*~
+.env
+*.txt
+Dockerfile
+.dockerignore
+.git
+.gitignore

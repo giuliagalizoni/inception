@@ -44,6 +44,26 @@ services:
       mariadb:
         condition: service_healthy
 
+  nginx:
+  # build the image from our own Dockerfile
+    build: requirements/nginx
+    image: nginx:inception
+    container_name: nginx
+    # load DOMAIN_NAME (used for the certificate) from .env
+    env_file: .env
+    # publish port 443 on the host
+    ports:
+      - "443:443"
+    # same WordPress files as the wordpress container, at the same path
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    restart: unless-stopped
+    # start after wordpress, so the name "wordpress" exists on the network
+    depends_on:
+      - wordpress
+
 # map each secret name to a file on the host
 secrets:
   db_password:
