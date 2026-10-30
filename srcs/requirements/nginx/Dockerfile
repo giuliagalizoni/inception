@@ -1,4 +1,3 @@
-# base image: penultimate stable Debian
 FROM debian:bookworm
 
 # install nginx and openssl (creates the TLS certificate)

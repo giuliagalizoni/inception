@@ -1,4 +1,3 @@
-# base image: starting point of the container
 FROM debian:bookworm
 
 # installs mariadb and cleanup system tables

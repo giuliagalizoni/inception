@@ -1,9 +1,12 @@
-# base image: penultimate stable Debian
 FROM debian:bookworm
 
-# install PHP-FPM (runs PHP), PHP CLI (needed by wp-cli),
-# the MariaDB driver and the extensions WordPress uses;
-# curl + certificates to download wp-cli over HTTPS
+# install packages:
+#	php8.2-fpm	runs the PHP code of WordPress
+#	php8.2-cli	the php command, needed by wp-cli
+#	php8.2-mysql	lets PHP connect to MariaDB
+#	curl, mbstring, xml	PHP extensions WordPress uses
+#	curl + ca-certificates	download files over HTTPS (for wp-cli)
+# then delete the apt cache to keep the image small
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		php8.2-fpm php8.2-cli php8.2-mysql \
